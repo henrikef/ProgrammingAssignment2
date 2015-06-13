@@ -1,10 +1,31 @@
-## Put comments here that give an overall description of what your
-## functions do
+## Implement a special matrix that can 'remember' its own inverse
+## to save computing time. The inverse is automatically deleted when
+## the matrix is assigned a new value. Also implement a function 
+## that returnes the inverse, returning the cached value if available
+## and calculating & caching the result if not.
 
-## Special kind of matrix that can cache its own inverse
-## Implemented as a list of functions to get/set the matrix and its inverse
+## Usage:
+## M <- matrix(c(1,0,0,1), 2,2)
+##
+## cacheM <- makeCacheMatrix( M )
+##
+## or
+## cacheM <- makeCacheMatrix()
+## cacheM$set(M)
+##
+## cacheM$get() ## returns M
+## 
+## cacheSolve(M) ## returns M^-1
+##
 
+
+## Special kind of matrix that can cache its own inverse.
+## Implemented as a list of functions.
+
+## Arguments: x: (invertable) matrix, default: 0*0 matrix.
+## Returns: List of functions to get/set the matrix and its inverse.
 makeCacheMatrix <- function(x = matrix()) {
+  
   ## placeholder for inverse matrix
   inverse <- NULL
   
@@ -47,6 +68,8 @@ makeCacheMatrix <- function(x = matrix()) {
 
 ## Invert a given matrix, using cached inverse if it exists.
 
+## Arguments: x: cacheMatrix
+## Returns: inverse of matrix
 cacheSolve <- function(x, ...) {
   
   ## first, check if a cached inverse exists or not.
@@ -58,7 +81,7 @@ cacheSolve <- function(x, ...) {
     matrix <- x$get()
     
     ## invert it
-    inverse <- solve(matrix)
+    inverse <- solve(matrix, ...)
     
     ## cache inverse matrix    
     x$setinverse( inverse )
